@@ -1,0 +1,99 @@
+[project]
+name = "oreum_survival"
+version = "1.0.0"
+description = "Oreum Industries Survival Regression Reference"
+readme = "README.md"
+license = {file = "LICENSE.md"}
+authors = [{ name = "Jonathan Sedar", email = "jonathan.sedar@oreum.io" },]
+requires-python = "==3.11.*"
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Science/Research",
+    "Intended Audience :: Financial and Insurance Industry",
+    "License :: Other/Proprietary License",
+    "Natural Language :: English",
+    "Operating System :: MacOS",
+    "Operating System :: Unix",
+    "Private :: Do Not Upload",
+    "Programming Language :: Python",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.11",
+    "Topic :: Scientific/Engineering",
+    "Topic :: Scientific/Engineering :: Information Analysis",
+    "Topic :: Scientific/Engineering :: Visualization",
+]
+dependencies = [
+    "ipywidgets",
+    "jupyterlab",
+    "lifelines",
+    "pyprojroot",
+    "rich",
+    "tqdm",
+    "watermark",
+]
+
+[project.optional-dependencies]
+dev = [
+    "bandit",
+    "black",
+    "flake8",
+    "hypothesis",
+    "interrogate",
+    "isort",
+    "pipdeptree",
+    "pip-licenses",
+    "pre-commit",
+    "pytest",
+]
+# NOTE: separated out to allow Makefile dev to get from pypi (dev-js gets local)
+oreum_core_dev = [
+    "oreum_core[pymc]>=0.9.7",  # the latest package using osx-arm64 Accelerate
+]
+
+[project.urls]
+homepage = "https://github.com/oreum-industries/oreum_survival"
+
+[tool.bandit]
+exclude_dirs = ["notebooks"]
+skips = ["B101"]  # skip asserts
+# tests = ["B201", "B301"]  # run all tests
+
+[tool.black]
+line-length = 88
+target-version = ["py311"]
+skip-string-normalization = true
+skip-magic-trailing-comma = true
+include = '\.py$'
+extend-exclude = """/(__pycache__)/"""
+# check = true # diff = true  # allow for different calls to use this
+color = true
+fast = false
+verbose = true
+
+[tool.interrogate]
+ignore-init-method = false
+ignore-init-module = true  # doesnt work with precommit see https://github.com/econchick/interrogate/issues/100
+ignore-magic = false
+ignore-semiprivate = false
+ignore-private = false
+ignore-property-decorators = false
+ignore-module = false
+ignore-nested-functions = false
+ignore-nested-classes = true
+ignore-setters = false
+fail-under = 80
+exclude = ["assets", "build", "dev", "notebooks"]
+ignore-regex = ["^get$", "^mock_.*", ".*BaseClass.*"]
+verbose = 1
+quiet = false
+whitelist-regex = []
+color = true
+omit-covered-files = false
+generate-badge = "assets/img/"
+badge-format = "svg"
+badge-style = "flat"
+
+[tool.isort]
+profile = 'black'
+multi_line_output = 3
+skip_gitignore = true

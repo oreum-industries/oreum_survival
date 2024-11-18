@@ -1,0 +1,13 @@
+name: ci
+on: [pull_request]
+jobs:
+  qc_coding_standards:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set Up Basic Python Env
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+      - name: Run Linter & Static Security Checks
+        run: make lint

@@ -1,0 +1,12 @@
+{
+	"folders": [
+		{
+			"path": "."
+		}
+	],
+	"settings": {
+		"python.defaultInterpreterPath": "~/miniforge/envs/oreum_survival/bin/python",
+		"workbench.colorTheme": "Theme",
+		"terminal.integrated.env.osx": { "PATH": "" },
+	}
+}

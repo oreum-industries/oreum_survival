@@ -1,0 +1,67 @@
+# .pre-commit-config.yaml
+default_language_version:
+  python: python3.11
+default_stages: [pre-commit, pre-push]
+repos:
+  - repo: https://github.com/pre-commit/pre-commit-hooks  # general checks
+    rev: v5.0.0
+    hooks:
+      - id: check-added-large-files
+        args: ['--maxkb=4096']
+        exclude: "([a-zA-Z0-9_]{1,}\\.ipynb|.+?\\.png)"
+      - id: check-merge-conflict
+      - id: check-toml
+      - id: check-yaml
+      - id: check-json
+        exclude : ^.vscode/
+      - id: pretty-format-json
+        args: ['--autofix']
+        exclude : ^.vscode/
+      - id: debug-statements
+      - id: detect-private-key
+      - id: check-case-conflict
+      - id: mixed-line-ending
+      - id: trailing-whitespace
+      - id: end-of-file-fixer
+      # - id: no-commit-to-branch
+      #   args: [--branch, master]
+  - repo: https://github.com/MarcoGorelli/madforhooks  # additional hooks
+    rev: 0.4.1
+    hooks:
+      - id: no-print-statements
+        files: ^src/
+  - repo: https://github.com/psf/black  # black formatter, dont use black-jupyter, too annoying
+    rev: 24.10.0
+    hooks:
+      - id: black
+        files: ^src/
+  - repo: https://github.com/PyCQA/isort  # isort sort imports
+    rev: 5.13.2
+    hooks:
+      - id: isort
+        files: ^src/
+  - repo: https://github.com/pycqa/flake8  # flake8 linter
+    rev: 7.1.1
+    hooks:
+      - id: flake8
+        files: ^src/
+  - repo: https://github.com/pycqa/bandit  # basic security checks for python code
+    rev: 1.7.10
+    hooks:
+      - id: bandit
+        files: ^src/
+        args: ["--config", "pyproject.toml"]
+        additional_dependencies: ["bandit[toml]"]
+  - repo: https://github.com/econchick/interrogate  # check for docstrings
+    rev: 1.7.0
+    hooks:
+      - id: interrogate
+        files: ^src/
+        args: [--config, pyproject.toml]
+        pass_filenames: false  # see https://github.com/econchick/interrogate/issues/60#issuecomment-1180262851
+  - repo: https://github.com/nbQA-dev/nbQA  # generalised notebook QA
+    rev: 1.9.1
+    hooks:
+      # - id: nbqa-black  # not yet
+      - id: nbqa-isort
+        additional_dependencies: [isort==5.10.1]

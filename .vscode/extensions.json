@@ -1,0 +1,22 @@
+{
+    "recommendations": [
+        "alexcvzz.vscode-sqlite",
+        "bierner.markdown-mermaid",
+        "dvirtz.parquet-viewer",
+        "euskadi31.json-pretty-printer",
+        "github.vscode-github-actions",
+        "mechatroner.rainbow-csv",
+        "ms-python.python",
+        "ms-python.vscode-pylance",
+        "ms-toolsai.jupyter",
+        "ms-toolsai.jupyter-keymap",
+        "ms-toolsai.jupyter-renderers",
+        "ms-toolsai.vscode-jupyter-powertoys",
+        // "mtxr.sqltools",
+        // "mtxr.sqltools-driver-pg",
+        "pdconsec.vscode-print",
+        "tal7aouy.theme",
+        "tamasfe.even-better-toml",
+        "yzhang.markdown-all-in-one"
+    ]
+}

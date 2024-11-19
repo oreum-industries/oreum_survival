@@ -101,13 +101,13 @@ class ProjectDFXCreator:
 
         # 2. create Transformer based on dfcmb
         tfmr = curate.Transformer()
-        _ = tfmr.fit_transform(self.fml_tfmr, self.dfcmb)
+        _ = tfmr.fit_transform(self.fml_tfmr, self.dfcmb, propagate_nans=True)
         self.factor_map = tfmr.factor_map
 
         # 3. Transform df according to dfcmb
         df_ex = tfmr.transform(df, propagate_nans=True)
 
-        # 5. Standardize
+        # 4. Standardize
         stdr = curate.Standardizer(tfmr)
         if in_sample:
             df_exs = stdr.fit_standardize(df_ex)

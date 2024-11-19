@@ -1,4 +1,4 @@
-# src.model.utils.py
+# src.engine.utils.py
 # copyright 2024 Oreum OÜ
 """Assorted display and plotting utilities for the project"""
 import arviz as az
@@ -74,9 +74,7 @@ def plot_f(dff: pd.DataFrame, f_nm: str, p_nm: str, **kwargs) -> figure.Figure:
 class ProjectDFXCreator:
     """Convenience class to process the main dataset (mastectomy) that's used
     throughout this project into `dfx` for model input. Saves us having to
-    redeclare it in each notebook. Also create a Cartesian explansion of
-    features and durations for use as `dffx` forecast set for explanatory
-    sample-PPC and plotting within the notebooks.
+    redeclare it in each notebook.
     """
 
     def __init__(self):

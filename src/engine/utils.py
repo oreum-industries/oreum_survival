@@ -1,4 +1,4 @@
-# src.model.utils.py
+# src.engine.utils.py
 # copyright 2024 Oreum OÜ
 """Assorted display and plotting utilities for the project"""
 import arviz as az
@@ -74,9 +74,7 @@ def plot_f(dff: pd.DataFrame, f_nm: str, p_nm: str, **kwargs) -> figure.Figure:
 class ProjectDFXCreator:
     """Convenience class to process the main dataset (mastectomy) that's used
     throughout this project into `dfx` for model input. Saves us having to
-    redeclare it in each notebook. Also create a Cartesian explansion of
-    features and durations for use as `dffx` forecast set for explanatory
-    sample-PPC and plotting within the notebooks.
+    redeclare it in each notebook.
     """
 
     def __init__(self):
@@ -103,13 +101,13 @@ class ProjectDFXCreator:
 
         # 2. create Transformer based on dfcmb
         tfmr = curate.Transformer()
-        _ = tfmr.fit_transform(self.fml_tfmr, self.dfcmb)
+        _ = tfmr.fit_transform(self.fml_tfmr, self.dfcmb, propagate_nans=True)
         self.factor_map = tfmr.factor_map
 
         # 3. Transform df according to dfcmb
         df_ex = tfmr.transform(df, propagate_nans=True)
 
-        # 5. Standardize
+        # 4. Standardize
         stdr = curate.Standardizer(tfmr)
         if in_sample:
             df_exs = stdr.fit_standardize(df_ex)

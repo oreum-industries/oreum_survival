@@ -47,7 +47,7 @@ This project **is not**:
 
 + Intended for public usage and will not be supported for public usage
 + Intended for contributions by anyone not an employee of Oreum Industries,
-  and unsolicitied contributions will not be accepted
+  and unsolicited contributions will not be accepted
 
 
 ### 1.2 Technical Overview
@@ -107,7 +107,7 @@ For local development on MacOS.
 
 ### 2.0 Pre-requisite installs via `homebrew`
 
-1. Install Homebrew, see instuctions at [https://brew.sh](https://brew.sh)
+1. Install Homebrew, see instructions at [https://brew.sh](https://brew.sh)
 2. Install `direnv`, `git`, `git-lfs`, `graphviz`, `zsh`
 
 ```zsh
@@ -208,7 +208,7 @@ Workflows to run a suite of automated tests for commits received at the origin
 #### 2.3.3 Git LFS
 
 We use [Git LFS](https://git-lfs.github.com) to store any large files alongside
-the repo. This can be useful to replicate exact environments dueing development
+the repo. This can be useful to replicate exact environments during development
 and/or for automated tests
 
 + This requires a local machine install
@@ -261,7 +261,7 @@ part of our CI process, prior to master branch merge.
 These include:
 
 + [`black`](https://github.com/psf/black) - standardised Python linting
-+ [`flake8`](https://flake8.pycqa.org/en/latest/) - addtional PEP8 Python linting
++ [`flake8`](https://flake8.pycqa.org/en/latest/) - additional PEP8 Python linting
 + [`isort`](https://pycqa.github.io/isort/) - sort Python package imports
 + [`interrogate`](https://pypi.org/project/interrogate/) - ensure complete Python
   docstrings
@@ -277,7 +277,7 @@ We also run a suite of general tests pre-packaged in
 
 Where suitable, we break out commonly used functions and classes to module files
 under the `src/` directory - this gives clear, convenient and easier code
-control than when it's embedded insode notebooks. Note for clarity, that we
+control than when it's embedded inside notebooks. Note for clarity, that we
 don't compile this code or release separately to the project.
 
 
@@ -290,7 +290,7 @@ General best practices for naming / ordering / structure.
 Every Notebook is:
 
 + Fully executable end-to-end, with linear non-cyclic flow
-+ Living documentation with entensive text and plot-based explanation
++ Living documentation with extensive text and plot-based explanation
 + Named starting with a 3-digit reference with group-based ordering to
 indicate logical flow and dependencies, e.g:
   + `000` series: Overview, discussion, presentational documents
@@ -379,8 +379,8 @@ Dataset terminology / partitioning / purpose:
     + We might create predictions for individual datapoints or in bulk
     + _If_ the entities in the data evolve over time (e.g. a set of policies
       each with evolving premium payments and claim developments),
-      and _if_ the endogenous features dont evolve with time (they are static
-      not dynamic) then we can artifically create a Forecast dataset by
+      and _if_ the endogenous features don't evolve with time (they are static
+      not dynamic) then we can artificially create a Forecast dataset by
       extending the Working dataset forward in time.
 
 Further note:

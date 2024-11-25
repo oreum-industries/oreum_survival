@@ -6,7 +6,7 @@
   integration or DB access, so we typically expect to work on static datasets
   stored locally for development
 + Datafiles should **_never_** be committed to the repo
-+ If we must use any local datafiles, they are explictly excluded from the repo
++ If we must use any local datafiles, they are explicitly excluded from the repo
   using the `.gitignore` file
 + Use [Git LFS](https://git-lfs.github.com) to track any large files, and
   control this using  `.gitattributes` files
@@ -33,7 +33,7 @@
   + These are raw data files verbatim exactly as supplied from the client
   + We run hashes against these using `hash_verbatim_files.sh` to assign an
     SHA1 hash with datetime to help with data lineage and governance
-  + These files are typically receieved in `.xls*` or `.*db` or `.*sv` formats
+  + These files are typically received in `.xls*` or `.*db` or `.*sv` formats
       and are usually very dirty
 
 + `raw/extracted/`
@@ -94,8 +94,8 @@ Dataset terminology / partitioning / purpose:
     + We might create predictions for individual datapoints or in bulk
     + _If_ the entities in the data evolve over time (e.g. a set of policies
       each with evolving premium payments and claim developments),
-      and _if_ the endogenous features dont evolve with time (they are static
-      not dynamic) then we can artifically create a Forecast dataset by
+      and _if_ the endogenous features don't evolve with time (they are static
+      not dynamic) then we can artificially create a Forecast dataset by
       extending the Working dataset forward in time.
 
 Further note:

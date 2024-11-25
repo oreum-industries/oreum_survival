@@ -8,5 +8,9 @@
 		"python.defaultInterpreterPath": "~/miniforge/envs/oreum_survival/bin/python",
 		"workbench.colorTheme": "Theme",
 		"terminal.integrated.env.osx": { "PATH": "" },
+		"cSpell.enabled": true,
+		"cSpell.enabledFileTypes": {
+			"jupyter": true
+		}
 	}
 }

@@ -29,7 +29,7 @@ dev:  # create env for local dev
 		export CONDA_ENV_PATH=$(MAMBADIR)/envs/oreum_survival/bin; \
 		export CONDA_DEFAULT_ENV=oreum_survival; \
 		$(PYTHON_ENV) -m pip index versions oreum_core; \
-		$(PYTHON_ENV) -m pip install ".[dev,oreum_core_dev]"; \
+		$(PYTHON_ENV) -m pip install ".[dev,oreum_core_pypi]"; \
 		$(PYTHON_ENV) -c "import numpy as np; np.__config__.show()" > dev/install_log/blas_info.txt; \
 		pipdeptree -a > dev/install_log/pipdeptree.txt; \
 		pipdeptree -a -r > dev/install_log/pipdeptree_rev.txt; \

@@ -84,9 +84,9 @@ install-mamba:  ## get mamba via miniforge, explicitly use bash
 
 lint: ## run code linters and static security (checks only)
 	$(PYTHON) -m pip install bandit interrogate ruff
-	ruff check --diff src/
-	ruff format --config pyproject.toml --no-cache --diff src/
-	interrogate src/
+	ruff check --diff
+	ruff format --no-cache --diff
+	interrogate --config pyproject.toml src/
 	bandit --config pyproject.toml -r src/
 
 

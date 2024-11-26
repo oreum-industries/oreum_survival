@@ -1,6 +1,7 @@
 # src.model.aft.py
 # copyright 2024 Oreum OÜ
 """Bayesian Survival Modelling: Accelerated Failure Time Models"""
+
 import numpy as np
 import pandas as pd
 import pymc as pm
@@ -8,7 +9,7 @@ import pytensor.tensor as pt
 from oreum_core import model_pymc as mt
 from pymc.distributions.dist_math import check_parameters
 
-__all__ = ['WeibullRegression', 'GompertzRegression', 'GompertzRegressionAlt']
+__all__ = ["WeibullRegression", "GompertzRegression", "GompertzRegressionAlt"]
 
 
 class WeibullRegression(mt.BasePYMCModel):
@@ -17,8 +18,8 @@ class WeibullRegression(mt.BasePYMCModel):
     As used by 200_AFT_Weibull.ipynb
     """
 
-    name = 'weibull_regression'
-    version = '1.0.1'
+    name = "weibull_regression"
+    version = "1.0.1"
 
     def __init__(
         self, obs: pd.DataFrame, fts_en: list, factor_map: dict, *args, **kwargs
@@ -30,13 +31,13 @@ class WeibullRegression(mt.BasePYMCModel):
         factor_map: from Transformer.factor_map
         """
         super().__init__(*args, **kwargs)
-        self.obs_nm = kwargs.pop('obs_nm', 'obs')
+        self.obs_nm = kwargs.pop("obs_nm", "obs")
         self.model = None
         self.rng = np.random.default_rng(seed=self.rsd)
         self.sample_kws.update(
             dict(
                 target_accept=0.9,  # set higher to avoid divergences
-                init='adapt_diag',  # avoid using jitter: sensitive startpos
+                init="adapt_diag",  # avoid using jitter: sensitive startpos
                 tune=4000,  # tune run longer
             )
         )
@@ -57,20 +58,20 @@ class WeibullRegression(mt.BasePYMCModel):
         self.coords_m = dict(oid=self.obs.index.values)  # (i, )
         t_r = self.obs[self.fts_en[0]].values  # (i, )
         d_r = self.obs[self.fts_en[1]].values  # (i, )
-        x_r = self.obs[self.coords['x_nm']].values  # (i, x)
+        x_r = self.obs[self.coords["x_nm"]].values  # (i, x)
 
         with pm.Model(coords=self.coords, coords_mutable=self.coords_m) as self.model:
             # 0. create MutableData containers for obs (Y, X)
-            t = pm.MutableData('t', t_r, dims='oid')  # (i, )
-            d = pm.MutableData('d', d_r, dims='oid')  # (i, )
-            x = pm.MutableData('x', x_r, dims=('oid', 'x_nm'))  # (i, x)
+            t = pm.MutableData("t", t_r, dims="oid")  # (i, )
+            d = pm.MutableData("d", d_r, dims="oid")  # (i, )
+            x = pm.MutableData("x", x_r, dims=("oid", "x_nm"))  # (i, x)
 
             # 1. define priors and hyperpriors on alpha
-            b_s = pm.Gamma('beta_s', alpha=1, beta=2)  # ( )
+            b_s = pm.Gamma("beta_s", alpha=1, beta=2)  # ( )
             # NOTE divergences when mu=0, so set 1
-            b = pm.Normal('beta', mu=0.2, sigma=b_s, dims='x_nm')  # (x, )
-            a = pm.Deterministic('alpha', pt.exp(pt.dot(x, b.T)), dims='oid')  # (i, )
-            g = pm.Gamma('gamma', alpha=1, beta=200)  # E ~ a / b = 0.005
+            b = pm.Normal("beta", mu=0.2, sigma=b_s, dims="x_nm")  # (x, )
+            a = pm.Deterministic("alpha", pt.exp(pt.dot(x, b.T)), dims="oid")  # (i, )
+            g = pm.Gamma("gamma", alpha=1, beta=200)  # E ~ a / b = 0.005
 
             # 2. define CustomDist log-likelihood incl. event censoring
             def _logp(
@@ -114,15 +115,15 @@ class WeibullRegression(mt.BasePYMCModel):
                 return np.round(t)  # TODO: quantize to obs unit reasonable?
 
             _ = pm.CustomDist(
-                'that', a, g, d, logp=_logp, random=_random, observed=t, dims='oid'
+                "that", a, g, d, logp=_logp, random=_random, observed=t, dims="oid"
             )
 
             # create survival function for convenience
-            _ = pm.Deterministic('shat', pt.exp(-pt.power(g * t, a)), dims='oid')
+            _ = pm.Deterministic("shat", pt.exp(-pt.power(g * t, a)), dims="oid")
 
-        self.rvs_prior = ['gamma', 'beta_s', 'beta']
-        self.rvs_ppc = ['that', 'shat']
-        self.rvs_det = ['alpha']
+        self.rvs_prior = ["gamma", "beta_s", "beta"]
+        self.rvs_ppc = ["that", "shat"]
+        self.rvs_det = ["alpha"]
 
         return self.model
 
@@ -133,8 +134,8 @@ class GompertzRegression(mt.BasePYMCModel):
     As used by 201_AFT_Gompertz.ipynb
     """
 
-    name = 'gompertz_regression'
-    version = '1.0.0'
+    name = "gompertz_regression"
+    version = "1.0.0"
 
     def __init__(
         self, obs: pd.DataFrame, fts_en: list, factor_map: dict, *args, **kwargs
@@ -146,13 +147,13 @@ class GompertzRegression(mt.BasePYMCModel):
         factor_map: from Transformer.factor_map
         """
         super().__init__(*args, **kwargs)
-        self.obs_nm = kwargs.pop('obs_nm', 'obs')
+        self.obs_nm = kwargs.pop("obs_nm", "obs")
         self.model = None
         self.rng = np.random.default_rng(seed=self.rsd)
         self.sample_kws.update(
             dict(
                 target_accept=0.85,  # set higher to avoid divergences
-                init='adapt_diag',  # avoid using jitter: sensitive startpos
+                init="adapt_diag",  # avoid using jitter: sensitive startpos
                 tune=2000,  # tune run longer
             )
         )
@@ -173,19 +174,19 @@ class GompertzRegression(mt.BasePYMCModel):
         self.coords_m = dict(oid=self.obs.index.values)  # (i, )
         t_r = self.obs[self.fts_en[0]].values  # (i, )
         d_r = self.obs[self.fts_en[1]].values  # (i, )
-        x_r = self.obs[self.coords['x_nm']].values  # (i, x)
+        x_r = self.obs[self.coords["x_nm"]].values  # (i, x)
 
         with pm.Model(coords=self.coords, coords_mutable=self.coords_m) as self.model:
             # 0. create MutableData containers for obs (Y, X)
-            t = pm.MutableData('t', t_r, dims='oid')  # (i, )
-            d = pm.MutableData('d', d_r, dims='oid')  # (i, )
-            x = pm.MutableData('x', x_r, dims=('oid', 'x_nm'))  # (i, x)
+            t = pm.MutableData("t", t_r, dims="oid")  # (i, )
+            d = pm.MutableData("d", d_r, dims="oid")  # (i, )
+            x = pm.MutableData("x", x_r, dims=("oid", "x_nm"))  # (i, x)
 
             # 1. define priors and hyperpriors on eta
-            b_s = pm.InverseGamma('beta_s', alpha=5, beta=1)  # ( )
-            b = pm.Normal('beta', mu=-3, sigma=b_s, dims='x_nm')  # (x, )
-            e = pm.Deterministic('eta', pt.exp(pt.dot(x, b.T)), dims='oid')  # (i, )
-            g = pm.InverseGamma('gamma', alpha=11, beta=1)
+            b_s = pm.InverseGamma("beta_s", alpha=5, beta=1)  # ( )
+            b = pm.Normal("beta", mu=-3, sigma=b_s, dims="x_nm")  # (x, )
+            e = pm.Deterministic("eta", pt.exp(pt.dot(x, b.T)), dims="oid")  # (i, )
+            g = pm.InverseGamma("gamma", alpha=11, beta=1)
 
             # 2. define CustomDist log-likelihood incl. event censoring
             def _logp(
@@ -231,15 +232,15 @@ class GompertzRegression(mt.BasePYMCModel):
                 return np.round(t)  # TODO: quantize to obs unit reasonable?
 
             _ = pm.CustomDist(
-                'that', e, g, d, logp=_logp, random=_random, observed=t, dims='oid'
+                "that", e, g, d, logp=_logp, random=_random, observed=t, dims="oid"
             )
 
             # create survival function for convenience
-            _ = pm.Deterministic('shat', pt.exp(-e * pt.expm1(g * t)), dims='oid')
+            _ = pm.Deterministic("shat", pt.exp(-e * pt.expm1(g * t)), dims="oid")
 
-        self.rvs_prior = ['gamma', 'beta_s', 'beta']
-        self.rvs_ppc = ['that', 'shat']
-        self.rvs_det = ['eta']
+        self.rvs_prior = ["gamma", "beta_s", "beta"]
+        self.rvs_ppc = ["that", "shat"]
+        self.rvs_det = ["eta"]
 
         return self.model
 
@@ -252,8 +253,8 @@ class GompertzRegressionAlt(mt.BasePYMCModel):
 
     """
 
-    name = 'gompertz_regression_alt'
-    version = '0.1.0'
+    name = "gompertz_regression_alt"
+    version = "0.1.0"
 
     def __init__(
         self, obs: pd.DataFrame, fts_en: list, factor_map: dict, *args, **kwargs
@@ -265,13 +266,13 @@ class GompertzRegressionAlt(mt.BasePYMCModel):
         factor_map: from Transformer.factor_map
         """
         super().__init__(*args, **kwargs)
-        self.obs_nm = kwargs.pop('obs_nm', 'obs')
+        self.obs_nm = kwargs.pop("obs_nm", "obs")
         self.model = None
         self.rng = np.random.default_rng(seed=self.rsd)
         self.sample_kws.update(
             dict(
                 target_accept=0.85,  # set higher to avoid divergences
-                init='adapt_diag',  # avoid using jitter: sensitive startpos
+                init="adapt_diag",  # avoid using jitter: sensitive startpos
                 tune=2000,  # tune run longer
             )
         )
@@ -292,19 +293,19 @@ class GompertzRegressionAlt(mt.BasePYMCModel):
         self.coords_m = dict(oid=self.obs.index.values)  # (i, )
         t_r = self.obs[self.fts_en[0]].values  # (i, )
         d_r = self.obs[self.fts_en[1]].values  # (i, )
-        x_r = self.obs[self.coords['x_nm']].values  # (i, x)
+        x_r = self.obs[self.coords["x_nm"]].values  # (i, x)
 
         with pm.Model(coords=self.coords, coords_mutable=self.coords_m) as self.model:
             # 0. create MutableData containers for obs (Y, X)
-            t = pm.MutableData('t', t_r, dims='oid')  # (i, )
-            d = pm.MutableData('d', d_r, dims='oid')  # (i, )
-            x = pm.MutableData('x', x_r, dims=('oid', 'x_nm'))  # (i, x)
+            t = pm.MutableData("t", t_r, dims="oid")  # (i, )
+            d = pm.MutableData("d", d_r, dims="oid")  # (i, )
+            x = pm.MutableData("x", x_r, dims=("oid", "x_nm"))  # (i, x)
 
             # 1. define priors and hyperpriors on M
-            b_s = pm.InverseGamma('beta_s', alpha=5, beta=1)  # ( )
-            b = pm.Normal('beta', mu=2, sigma=b_s, dims='x_nm')  # (x, )
-            m = pm.Deterministic('m', pt.exp(pt.dot(x, b.T)), dims='oid')  # (i, )
-            g = pm.InverseGamma('gamma', alpha=11, beta=1)
+            b_s = pm.InverseGamma("beta_s", alpha=5, beta=1)  # ( )
+            b = pm.Normal("beta", mu=2, sigma=b_s, dims="x_nm")  # (x, )
+            m = pm.Deterministic("m", pt.exp(pt.dot(x, b.T)), dims="oid")  # (i, )
+            g = pm.InverseGamma("gamma", alpha=11, beta=1)
 
             # 2. define CustomDist log-likelihood incl. event censoring
             def _logp(
@@ -347,16 +348,16 @@ class GompertzRegressionAlt(mt.BasePYMCModel):
                 return np.round(t)  # TODO: quantize to obs unit reasonable?
 
             _ = pm.CustomDist(
-                'that', m, g, d, logp=_logp, random=_random, observed=t, dims='oid'
+                "that", m, g, d, logp=_logp, random=_random, observed=t, dims="oid"
             )
 
             # create survival function for convenience
             _ = pm.Deterministic(
-                'shat', pt.exp(pt.exp(-g * m) - pt.exp(g * (t - m))), dims='oid'
+                "shat", pt.exp(pt.exp(-g * m) - pt.exp(g * (t - m))), dims="oid"
             )
 
-        self.rvs_prior = ['gamma', 'beta_s', 'beta']
-        self.rvs_ppc = ['that', 'shat']
-        self.rvs_det = ['m']
+        self.rvs_prior = ["gamma", "beta_s", "beta"]
+        self.rvs_ppc = ["that", "shat"]
+        self.rvs_det = ["m"]
 
         return self.model

@@ -1,6 +1,6 @@
 [project]
 name = "oreum_survival"
-version = "1.0.0"
+version = "1.0.1"
 description = "Oreum Industries Survival Regression Reference"
 readme = "README.md"
 license = {file = "LICENSE.md"}
@@ -35,19 +35,17 @@ dependencies = [
 [project.optional-dependencies]
 dev = [
     "bandit",
-    "black",
-    "flake8",
     "hypothesis",
     "interrogate",
-    "isort",
     "pipdeptree",
     "pip-licenses",
     "pre-commit",
     "pytest",
+    "ruff",
 ]
 # NOTE: separated out to allow Makefile dev to get from pypi (dev-js gets local)
 oreum_core_dev = [
-    "oreum_core[pymc]>=0.9.7",  # the latest package using osx-arm64 Accelerate
+    "oreum_core[pymc]>=0.9.8",  # the latest package using osx-arm64 Accelerate
 ]
 
 [project.urls]
@@ -57,18 +55,6 @@ homepage = "https://github.com/oreum-industries/oreum_survival"
 exclude_dirs = ["notebooks"]
 skips = ["B101"]  # skip asserts
 # tests = ["B201", "B301"]  # run all tests
-
-[tool.black]
-line-length = 88
-target-version = ["py311"]
-skip-string-normalization = true
-skip-magic-trailing-comma = true
-include = '\.py$'
-extend-exclude = """/(__pycache__)/"""
-# check = true # diff = true  # allow for different calls to use this
-color = true
-fast = false
-verbose = true
 
 [tool.interrogate]
 ignore-init-method = false
@@ -93,7 +79,69 @@ generate-badge = "assets/img/"
 badge-format = "svg"
 badge-style = "flat"
 
-[tool.isort]
-profile = 'black'
-multi_line_output = 3
-skip_gitignore = true
+[tool.ruff]  # settings: https://docs.astral.sh/ruff/settings/
+indent-width = 4
+line-length = 88
+target-version = "py311"
+extend-exclude = [
+    "__pycache__",
+    "build",
+    "dev",
+    "lib",
+    "lib64",
+    "sdist",
+    "var",
+    "wheels",
+]
+
+[tool.ruff.lint]
+# fixable = ["ALL"]  # allow fix for all enabled rules (when `--fix`) provided
+unfixable = ["B"]
+# allow unused underscore-prefix vars
+dummy-variable-rgx = "^(_+|(_+[a-zA-Z0-9_]*[a-zA-Z0-9]+?))$"
+# exclude = ["*.ipynb"]  # commented to _allow_ lint notebooks (useful)
+
+select = [
+    "B",  # flake8-bugbear
+    "C",  # flake8-comprehensions
+    "E",  # pycodestyle errors
+    "F",  # pyflakes
+    "I",  # isort
+    "W",  # pycodestyle warnings
+    "B9", # legacy from .flake8 config
+]
+ignore = [
+    "B026",  # let me do star unpacking
+    "C405",  # let me use set()
+    "C408",  # let me use dict()
+    "C416",  # let me use list comprehensions
+    "C419",  # let me use list comprehensions
+    "C901",  # too complex
+    "E203",  # legacy from .flake8 config
+    "E266",  # legacy from .flake8 config
+    "E501",  # line too long
+    "E712",  # legacy from .flake8 config
+    "F401",  # legacy from .flake8 config
+    "F403",  # legacy from .flake8 config
+    "W291",  # legacy from .flake8 config
+    "W293",  # legacy from .flake8 config
+    "W605",  # legacy from .flake8 config
+]
+
+[tool.ruff.lint.per-file-ignores]
+"*.ipynb" = ["E402"]
+
+[tool.ruff.format]
+indent-style = "space"
+line-ending = "auto"
+quote-style = "double"
+skip-magic-trailing-comma = true
+exclude = ["*.ipynb"]
+
+[tool.ruff.lint.isort]
+order-by-type = true
+relative-imports-order = "closest-to-furthest"
+extra-standard-library = ["typing"]
+section-order = ["future", "standard-library", "third-party", "first-party", "local-folder"]
+known-first-party = []
+split-on-trailing-comma=false

@@ -83,11 +83,10 @@ install-mamba:  ## get mamba via miniforge, explicitly use bash
 
 
 lint: ## run code linters and static security (checks only)
-	$(PYTHON) -m pip install black flake8 interrogate isort sqlfluff bandit
-	black --check --diff --config pyproject.toml src/
-	isort --check-only src/
-	flake8 src/
-	interrogate src/
+	$(PYTHON) -m pip install bandit interrogate ruff
+	ruff check --diff
+	ruff format --no-cache --diff
+	interrogate --config pyproject.toml src/
 	bandit --config pyproject.toml -r src/
 
 

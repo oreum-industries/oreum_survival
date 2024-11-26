@@ -84,10 +84,11 @@ install-mamba:  ## get mamba via miniforge, explicitly use bash
 
 lint: ## run code linters and static security (checks only)
 	$(PYTHON) -m pip install bandit interrogate ruff
+	bandit --config pyproject.toml -r src/
+	interrogate --config pyproject.toml src/
 	ruff check --diff
 	ruff format --no-cache --diff
-	interrogate --config pyproject.toml src/
-	bandit --config pyproject.toml -r src/
+
 
 
 test-dev-env:  ## test the dev machine install of critial numeric packages

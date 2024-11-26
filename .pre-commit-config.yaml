@@ -36,7 +36,6 @@ repos:
       - id: ruff   # lint
         args: [ --fix]
       - id: ruff-format  # formatter
-        # files: ^src/
   - repo: https://github.com/pycqa/bandit  # basic security checks for python code
     rev: 1.7.10
     hooks:
@@ -51,9 +50,3 @@ repos:
         files: ^src/
         args: [--config, pyproject.toml]
         pass_filenames: false  # see https://github.com/econchick/interrogate/issues/60#issuecomment-1180262851
-  - repo: https://github.com/nbQA-dev/nbQA  # generalised notebook QA
-    rev: 1.9.1
-    hooks:
-      # - id: nbqa-black  # not yet
-      - id: nbqa-isort
-        additional_dependencies: [isort==5.10.1]

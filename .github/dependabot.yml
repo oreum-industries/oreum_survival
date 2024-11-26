@@ -1,6 +1,6 @@
 version: 2
 updates:
-  - package-ecosystem: "github-actions"  # Maintain deps for GitHub actions
-    directory: "/src"
+  - package-ecosystem: "github-actions"
+    directory: "/"
     schedule:
       interval: "weekly"

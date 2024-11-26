@@ -1,6 +1,2 @@
 # placeholder
 data/raw/verbatim/mastectomy.csv filter=lfs diff=lfs merge=lfs -text
-data/raw/verbatim/birthssummary2022refreshedpopulations.xlsx filter=lfs diff=lfs merge=lfs -text
-data/raw/verbatim/mortalitybysingleyearofage202017012022091541.xlsx filter=lfs diff=lfs merge=lfs -text
-data/raw/verbatim/dr2022corrected.xlsx filter=lfs diff=lfs merge=lfs -text
-data/raw/verbatim/lung.csv filter=lfs diff=lfs merge=lfs -text

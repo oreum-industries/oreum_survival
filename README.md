@@ -2,20 +2,14 @@
 
 ## Oreum Survival `oreum_survival`
 
-Demonstrate Survival Regression Modelling using Bayesian inference and a
+Demonstrate Survival Regression Modeling using Bayesian inference and a
 Bayesian workflow, specifically using the `pymc` & `arviz` ecosystem.
-
 
 [![Python](https://img.shields.io/badge/python-3.11-blue)](https://www.python.org)
 [![CI](https://github.com/oreum-industries/oreum_survival/workflows/ci/badge.svg)](https://github.com/oreum-industries/oreum_survival/actions/workflows/ci.yml)
-<!-- [![GitHub Release](https://img.shields.io/github/v/release/oreum-industries/oreum_survival?display_name=tag&sort=semver)](https://github.com/oreum-industries/oreum_survival/releases) -->
-
-[![code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
-[![code style: flake8](https://img.shields.io/badge/code%20style-flake8-331188.svg)](https://flake8.pycqa.org/en/latest/)
-[![code style: isort](https://img.shields.io/badge/code%20style-isort-%231674b1?style=flat)](https://pycqa.github.io/isort/)
-[![code style: interrogate](https://raw.githubusercontent.com/oreum-industries/oreum_survival/master/assets/img/interrogate_badge.svg)](https://pypi.org/project/interrogate/)
+[![code style: ruff](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/astral-sh/ruff/main/assets/badge/v2.json)](https://github.com/astral-sh/ruff)
+[![code style: interrogate](https://raw.githubusercontent.com/oreum-industries/oreum_core/master/assets/img/interrogate_badge.svg)](https://pypi.org/project/interrogate/)
 [![code security: bandit](https://img.shields.io/badge/code%20security-bandit-yellow.svg)](https://github.com/PyCQA/bandit)
-
 
 
 ### Contents
@@ -260,12 +254,10 @@ part of our CI process, prior to master branch merge.
 
 These include:
 
-+ [`black`](https://github.com/psf/black) - standardised Python linting
-+ [`flake8`](https://flake8.pycqa.org/en/latest/) - additional PEP8 Python linting
-+ [`isort`](https://pycqa.github.io/isort/) - sort Python package imports
++ [`ruff`](https://docs.astral.sh/ruff/) - extremely fast standardised linting
+  and formatting, which replaces `black`, `flake8`, `isort`
 + [`interrogate`](https://pypi.org/project/interrogate/) - ensure complete Python
   docstrings
-+ [`sqlfluff`](https://www.sqlfluff.com) - standardised SQL linting
 + [`bandit`](https://github.com/PyCQA/bandit) - test for common Python security
   issues
 
@@ -390,7 +382,7 @@ Further note:
   model against a _known_ exogenous (target) value or forecast an _unknown_
   exogenous (target) value. So they can be used during Working or Forecasting.
 
-+ Strictly speaking, our Bayesian modelling workflow does not require us to
++ Strictly speaking, our Bayesian modeling workflow does not require us to
   evaluate the model on a Test/Holdout set because we can use in-sample
   Pareto-smoothed Leave-One-Out (LOO-PIT) cross-validation testing. This is more
   powerful, and lets us fit & evaluate the model using the full Working set.
